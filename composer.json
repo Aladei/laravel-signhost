@@ -1,0 +1,98 @@
+{
+    "name": "noardcode/laravel-signhost",
+    "description": "Official Laravel package for Signhost.",
+    "keywords": [
+        "laravel",
+        "NoardCode",
+        "Signhost",
+        "Evidos"
+    ],
+    "license": "MIT",
+    "homepage": "https://www.noardcode.nl",
+    "support": {
+        "issues": "https://github.com/noardcode/laravel-signhost/issues",
+        "source": "https://github.com/noardcode/laravel-signhost"
+    },
+    "authors": [
+        {
+            "name": "Chris Hagg",
+            "email": "chris@noardcode.nl"
+        },
+        {
+            "name": "Damiaen Toussaint",
+            "email": "damiaen@noardcode.nl"
+        }
+    ],
+    "require": {
+        "php": "^8.2|^8.3|^8.4",
+        "laravel/framework": "^11.0|^12.0",
+        "ext-fileinfo": "*",
+        "ext-bcmath": "*"
+    },
+    "require-dev": {
+        "ext-sqlite3": "*",
+        "larastan/larastan": "^3.3",
+        "laravel/boost": "^1.3",
+        "laravel/pint": "^1.24",
+        "orchestra/testbench": "^9.0|^10.0",
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Noardcode\\LaravelSignhost\\": "src",
+            "Noardcode\\LaravelSignhost\\Seeders\\": "database/seeders",
+            "Noardcode\\LaravelSignhost\\Factories\\": "database/factories"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Noardcode\\LaravelSignhost\\Tests\\": "tests",
+            "Noardcode\\LaravelSignhost\\Workbench\\App\\": "workbench/app/",
+            "Noardcode\\LaravelSignhost\\Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Noardcode\\LaravelSignhost\\Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+        }
+    },
+    "scripts": {
+        "wb:install": "php vendor/bin/testbench workbench:install",
+        "wb:build": "php vendor/bin/testbench workbench:build --ansi",
+        "wb:purge": "php vendor/bin/testbench workbench:purge",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@wb:build",
+            "php vendor/bin/testbench serve"
+        ],
+        "wb:rebuild": [
+            "@wb:purge",
+            "@wb:build"
+        ],
+        "pint": "vendor/bin/pint --parallel",
+        "pint-test": "vendor/bin/pint --parallel --test",
+        "test": "vendor/bin/pest --colors=always",
+        "test-coverage": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php -d xdebug.mode=coverage vendor/bin/pest -c phpunit.xml --coverage-html coverage"
+        ],
+        "phpstan": [
+            "@php vendor/bin/phpstan analyse --verbose --ansi"
+        ]
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Noardcode\\LaravelSignhost\\Providers\\SignhostServiceProvider"
+            ],
+            "aliases": {
+                "Signhost": "Noardcode\\LaravelSignhost\\Facades\\Signhost"
+            }
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

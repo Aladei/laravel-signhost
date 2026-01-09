@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  ci:
+    name: PHP ${{ matrix.php }} • Laravel ${{ matrix.laravel }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { php: '8.2', laravel: '11', testbench: '^9.0' }
+          - { php: '8.3', laravel: '11', testbench: '^9.0' }
+          - { php: '8.4', laravel: '11', testbench: '^9.0' }
+          - { php: '8.2', laravel: '12', testbench: '^10.0' }
+          - { php: '8.3', laravel: '12', testbench: '^10.0' }
+          - { php: '8.4', laravel: '12', testbench: '^10.0' }
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, pdo_sqlite, pcov
+          tools: composer:v2
+          coverage: pcov
+
+      - name: Adjust Testbench for Laravel ${{ matrix.laravel }}
+        run: |
+          composer update --with "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-progress --prefer-dist
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Pint (check-only)
+        run: vendor/bin/pint --test
+
+      - name: PHPStan
+        run: vendor/bin/phpstan analyse
+
+      - name: Generate APP_KEY
+        run: echo "APP_KEY=base64:$(php -r 'echo base64_encode(random_bytes(32));')" >> $GITHUB_ENV
+
+      - name: Prepare Workbench DB (migrate)
+        run: |
+          php vendor/bin/testbench workbench:purge
+          php vendor/bin/testbench workbench:build --no-ansi
+          echo "DB_CONNECTION=sqlite" >> $GITHUB_ENV
+          echo "DB_DATABASE=$GITHUB_WORKSPACE/vendor/orchestra/testbench-core/laravel/database/database.sqlite" >> $GITHUB_ENV
+          echo "APP_ENV=testing" >> $GITHUB_ENV
+          echo "APP_KEY=base64:$(php -r 'echo base64_encode(random_bytes(32));')" >> $GITHUB_ENV
+
+      - name: PHPUnit (with coverage)
+        run: php -d pcov.enabled=1 -d pcov.directory=. vendor/bin/pest --coverage-clover coverage/clover.xml
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-php${{ matrix.php }}-laravel${{ matrix.laravel }}
+          path: coverage/

@@ -1,0 +1,31 @@
+laravel: '@testbench'
+
+providers:
+   - Noardcode\LaravelSignhost\Workbench\App\Providers\WorkbenchServiceProvider
+
+migrations:
+  - workbench/database/migrations
+  - database/migrations
+
+seeders:
+  - Noardcode\LaravelSignhost\Workbench\Database\Seeders\DatabaseSeeder
+
+workbench:
+  start: '/'
+  install: true
+  storage: .workbench
+  health: false
+  discovers:
+    web: true
+    api: true
+    commands: true
+    components: false
+    factories: true
+    views: true
+  build:
+    - asset-publish
+    - create-sqlite-db
+    - db-wipe
+    - migrate-fresh
+  assets:
+    - laravel-assets
