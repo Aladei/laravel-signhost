@@ -2,6 +2,7 @@
 
 namespace Noardcode\LaravelSignhost\Providers;
 
+use Aladei\Tenancy\Tenancy;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 use Noardcode\LaravelSignhost\Console\Commands\FakeSignhostIdProofWebhookCommand;
@@ -36,6 +37,9 @@ class SignhostServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->consoleFunctionality();
         }
+
+        // Tenancy
+        Tenancy::addMigrationPath(__DIR__.'/../database/migrations/tenants');
 
         $this->loadRoutesFrom($this->getPackageBasePath('/routes/web.php'));
         $this->mergeConfigFrom($this->getPackageBasePath('/config/disks.php'), 'filesystems.disks');
