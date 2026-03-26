@@ -2,6 +2,7 @@
 
 namespace Noardcode\LaravelSignhost\Models;
 
+use Aladei\Tenancy\Traits\Models\UseTenantConnection;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Support\Str;
 
@@ -17,6 +18,8 @@ use Illuminate\Support\Str;
  */
 abstract class Model extends EloquentModel
 {
+    use UseTenantConnection;
+
     protected $keyType = 'string';
 
     public $incrementing = false;

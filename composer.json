@@ -23,11 +23,47 @@
             "email": "damiaen@noardcode.nl"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:Aladei/Base.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:Aladei/Multilingual.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:Aladei/Resources.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:Aladei/Authorization.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:Aladei/Settings.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:Aladei/Navigation.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:Aladei/Tenancy.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:Aladei/Theme.git"
+        }
+    ],
+
     "require": {
         "php": "^8.2|^8.3|^8.4|^8.5",
         "laravel/framework": "^11.0|^12.0|^13.0",
         "ext-fileinfo": "*",
-        "ext-bcmath": "*"
+        "ext-bcmath": "*",
+        "aladei/tenancy": "dev-Anna-Lisa-4.x"
     },
     "require-dev": {
         "ext-sqlite3": "*",
@@ -80,7 +116,8 @@
     "config": {
         "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
         }
     },
     "extra": {
@@ -93,6 +130,6 @@
             }
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }
