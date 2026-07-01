@@ -108,6 +108,7 @@ trait SignhostClientFaker
                         ]) ?? [],
                     ];
                     $receiversResponse[] = [
+                        'Id' => $receiver->id,
                         'Name' => $receiver->name ?? 'Receiver '.($receiver->id ?? ''),
                         'Email' => $receiver->email ?? 'receiver'.($receiver->id ?? '').'@example.com',
                         'Language' => $receiver->language ?? 'nl-NL',

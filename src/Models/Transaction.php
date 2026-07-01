@@ -29,7 +29,6 @@ class Transaction extends Model
 
     protected $casts = [
         'object' => 'encrypted:object',
-        'status_code' => TransactionStatus::class,
         'finalized' => 'boolean',
         'context' => 'encrypted:object',
         'webhook_response' => 'encrypted:object',
@@ -37,6 +36,20 @@ class Transaction extends Model
         'modified_date_time' => 'datetime',
         'cancelled_date_time' => 'datetime',
     ];
+
+    /**
+     * The transaction status is stored in the `status` column (integer). Expose
+     * it as a TransactionStatus enum under `status_code` (the name used across
+     * the package: webhook handler, poll, faker and consumers). Reading/writing
+     * `status_code` transparently maps to the `status` column.
+     */
+    public function statusCode(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->status !== null ? TransactionStatus::tryFrom((int) $this->status) : null,
+            set: fn ($value) => ['status' => $value instanceof TransactionStatus ? $value->value : $value],
+        );
+    }
 
     /**
      * @return HasMany
