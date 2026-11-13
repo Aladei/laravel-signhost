@@ -16,6 +16,13 @@ return [
     ],
 
     /**
+     * Whether this package registers its own routes: the webhook postbacks (`signhost/postback/*`)
+     * and the IdProof redirect. Off: the application receives Signhost's callbacks on a route of
+     * its own, so these would be a second, unguarded way in.
+     */
+    'routes' => false,
+
+    /**
      * Webhook configuration.
      */
     'webhook' => [

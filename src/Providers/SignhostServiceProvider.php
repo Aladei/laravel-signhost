@@ -24,7 +24,9 @@ class SignhostServiceProvider extends ServiceProvider
         // Tenancy
         Tenancy::addMigrationPath(__DIR__.'/../../database/migrations/tenants');
 
-        $this->loadRoutesFrom($this->getPackageBasePath('/routes/web.php'));
+        if (config('signhost.routes')) {
+            $this->loadRoutesFrom($this->getPackageBasePath('/routes/web.php'));
+        }
         $this->mergeConfigFrom($this->getPackageBasePath('/config/disks.php'), 'filesystems.disks');
 
         $this->commands([

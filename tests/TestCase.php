@@ -38,6 +38,7 @@ class TestCase extends BaseTestCase
     protected function defineEnvironment($app): void
     {
         $app['config']->set('app.key', 'base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=');
+        $app['config']->set('signhost.routes', true);
 
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite', [
